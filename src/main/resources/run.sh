@@ -1,0 +1,1 @@
+java -jar sittpuffen-api-1.0-SNAPSHOT.jar
