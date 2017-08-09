@@ -28,12 +28,6 @@
             <version>${gson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fakemongo</groupId>
-            <artifactId>fongo</artifactId>
-            <version>${fongo.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo</artifactId>
             <version>${kmongo.version}</version>
@@ -106,7 +100,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>se.osten.launcher.SittpuffenApiKt</mainClass>
+                                    <mainClass>se.osten.launcher.RestfulAPIKt</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

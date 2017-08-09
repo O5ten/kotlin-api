@@ -2,27 +2,28 @@ package se.osten.launcher
 
 import com.google.gson.Gson
 import se.osten.beans.Sittpuff
-import se.osten.dao.SittpuffDao
+import se.osten.dao.InMemorySittpuffDAO
+import se.osten.dao.MongoSittpuffDAO
 import se.osten.utils.createGuid
 import se.osten.utils.filterByTag
 import spark.Spark.*
 
 fun main(args: Array<String>) {
 
-    val sittpuffDAO = SittpuffDao()
+    val dao = MongoSittpuffDAO()
     val gson = Gson()
 
     path("/sittpuffar") {
 
         get("") { req, res ->
-            println("API: /sittpuffar ${sittpuffDAO.sittpuffar.size} results delivered")
+            println("API: /sittpuffar ${dao.count()} results delivered")
             res.type("application/json")
-            gson.toJson(filterByTag(req, sittpuffDAO.sittpuffar))
+            gson.toJson(filterByTag(req, dao.findAll()))
         }
 
         get("/:id") { req, res ->
             res.type("application/json")
-            val sittpuff: Sittpuff? = sittpuffDAO.findById(req.params("id"))
+            val sittpuff: Sittpuff? = dao.findById(req.params("id"))
             if (sittpuff != null) {
                 println("API: /sittpuffar/${req.params("id")} found")
                 gson.toJson(sittpuff)
@@ -36,7 +37,7 @@ fun main(args: Array<String>) {
         post("") { req, res ->
             val fromJson: Sittpuff = gson.fromJson(req.body(), Sittpuff::class.java)
             val id: String = createGuid()
-            sittpuffDAO.save(fromJson.copy(id))
+            dao.save(fromJson.copy(id))
             println("API: /sittpuffar/${id} created")
             res.status(201)
             ""
@@ -45,12 +46,12 @@ fun main(args: Array<String>) {
         put("/:id") { req, res ->
             val sittpuff: Sittpuff = gson.fromJson(req.body(), Sittpuff::class.java)
             println("API: /sittpuffar/${sittpuff.id} modified")
-            sittpuffDAO.update(req.params("id"), sittpuff)
+            dao.update(req.params("id"), sittpuff)
         }
 
         delete("/:id") { req, res ->
             println("API: /sittpuffar/${req.params("id")} removed")
-            sittpuffDAO.delete(req.params("id"))
+            dao.delete(req.params("id"))
         }
     }
 }
