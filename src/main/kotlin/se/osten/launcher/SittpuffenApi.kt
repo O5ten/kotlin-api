@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import se.osten.beans.Sittpuff
 import se.osten.dao.SittpuffDao
 import se.osten.utils.createGuid
+import se.osten.utils.filterByTag
 import spark.Spark.*
 
 fun main(args: Array<String>) {
@@ -16,31 +17,20 @@ fun main(args: Array<String>) {
         get("") { req, res ->
             println("API: /sittpuffar ${sittpuffDAO.sittpuffar.size} results delivered")
             res.type("application/json")
-            gson.toJson(sittpuffDAO.sittpuffar)
+            gson.toJson(filterByTag(req, sittpuffDAO.sittpuffar))
         }
 
         get("/:id") { req, res ->
             res.type("application/json")
             val sittpuff: Sittpuff? = sittpuffDAO.findById(req.params("id"))
-            if (sittpuff != null){
+            if (sittpuff != null) {
                 println("API: /sittpuffar/${req.params("id")} found")
                 gson.toJson(sittpuff)
-            }else{
+            } else {
                 println("API: /sittpuffar/${req.params("id")} not found")
                 res.status(404)
+                "404 Not found"
             }
-        }
-
-        get("/filter/*/name/:name") { req, res ->
-            res.type("application/json")
-            println("API: /sittpuffar/*/name/${req.params("name")} found")
-            gson.toJson(sittpuffDAO.findByName(req.params("name")))
-        }
-
-        get("/filter/*/tags/:tag") { req, res ->
-            res.type("application/json")
-            println("API: /sittpuffar/*/tag/${req.params("tag")} found")
-            gson.toJson(sittpuffDAO.findByTag(req.params("tag")))
         }
 
         post("") { req, res ->
@@ -49,6 +39,7 @@ fun main(args: Array<String>) {
             sittpuffDAO.save(fromJson.copy(id))
             println("API: /sittpuffar/${id} created")
             res.status(201)
+            ""
         }
 
         put("/:id") { req, res ->
@@ -62,5 +53,4 @@ fun main(args: Array<String>) {
             sittpuffDAO.delete(req.params("id"))
         }
     }
-    sittpuffDAO.sittpuffar.forEach(::println)
 }

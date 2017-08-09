@@ -1,5 +1,7 @@
 package se.osten.utils
 
+import se.osten.beans.Sittpuff
+import spark.Request
 import java.util.*
 
 val bitsOf32: IntRange = 0..31
@@ -9,6 +11,15 @@ fun createGuid(): String {
     val rnd: Random = Random(System.currentTimeMillis())
     val range: List<Int> = bitsOf32.map { rnd.nextInt(16) }
     return range.mapIndexed { v, i -> intToHex(v, i) }.joinToString("");
+}
+
+fun filterByTag(req: Request, sittpuffar: List<Sittpuff>): List<Sittpuff> {
+    val tags = req.queryParams("tags")?.split(",")?.map { v -> v.toLowerCase() }
+    return if (tags != null) return sittpuffar.filter { v ->
+        v.tags.map { t -> t.toLowerCase() }.any { t ->
+            t in tags
+        }
+    } else sittpuffar
 }
 
 fun intToHex(index: Int, key: Int): String {

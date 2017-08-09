@@ -2,32 +2,33 @@ package se.osten.dao
 
 import se.osten.beans.Sittpuff
 import se.osten.utils.createGuid
+import spark.Request
 
 class SittpuffDao {
 
-    val sittpuffar = HashMap<String, Sittpuff>()
+    val sittpuffar = mutableListOf<Sittpuff>();
 
     fun save(sittpuff: Sittpuff) {
-        sittpuffar[sittpuff.id] = sittpuff
+        sittpuffar.add(sittpuff)
     }
 
     fun findById(id: String): Sittpuff? {
-        return sittpuffar[id]
+        return sittpuffar.find { v -> v.id == id }
     }
 
     fun findByName(name: String): Sittpuff? {
-        return sittpuffar.values.find { it.name == name}
+        return sittpuffar.find { it.name == name }
     }
 
-    fun findByTag(tag: String): List<Sittpuff>? {
-        return sittpuffar.values.filter { v -> tag in v.tags }
-    }
+
+
 
     fun update(id: String, sittpuff: Sittpuff) {
-        sittpuffar[id] = sittpuff
+        delete(id)
+        sittpuffar.add(sittpuff)
     }
 
     fun delete(id: String) {
-        sittpuffar.remove(id)
+        sittpuffar.removeIf { v -> v.id == id }
     }
 }
