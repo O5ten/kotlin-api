@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
             } else {
                 println("API: /sittpuffar/${req.params("id")} not found")
                 res.status(404)
-                "404 Not found"
+                ""
             }
         }
 
@@ -40,18 +40,20 @@ fun main(args: Array<String>) {
             dao.save(fromJson.copy(id))
             println("API: /sittpuffar/${id} created")
             res.status(201)
-            ""
+            "$id created"
         }
 
         put("/:id") { req, res ->
             val sittpuff: Sittpuff = gson.fromJson(req.body(), Sittpuff::class.java)
             println("API: /sittpuffar/${sittpuff.id} modified")
             dao.update(req.params("id"), sittpuff)
+            ""
         }
 
         delete("/:id") { req, res ->
             println("API: /sittpuffar/${req.params("id")} removed")
             dao.delete(req.params("id"))
+            ""
         }
     }
 }

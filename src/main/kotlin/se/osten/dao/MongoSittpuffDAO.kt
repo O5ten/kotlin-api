@@ -2,6 +2,7 @@ package se.osten.dao
 
 import com.mongodb.MongoClientURI
 import org.litote.kmongo.*
+import org.litote.kmongo.MongoOperator.*
 import org.litote.kmongo.util.KMongoConfiguration
 import se.osten.beans.Sittpuff
 
@@ -10,7 +11,7 @@ class MongoSittpuffDAO : SittpuffDAO {
     val client = KMongo.createClient("192.168.0.198:27017")
     val database = client.getDatabase("sittpuffar")
     val sittpuffar = database.getCollection<Sittpuff>("sittpuffar")
-    val byId = { id: String -> "{id: {\$eq: $id}"}
+    val byId = { id: String -> "{id: {$eq: '$id'}}" }
     override fun count(): Long {
         return sittpuffar.count()
     }
@@ -32,8 +33,7 @@ class MongoSittpuffDAO : SittpuffDAO {
     }
 
     override fun update(id: String, sittpuff: Sittpuff) {
-        delete(id)
-        sittpuffar.updateOne(byId(id), sittpuff)
+        sittpuffar.findOneAndReplace(byId(id), sittpuff)
     }
 
     override fun delete(id: String) {
