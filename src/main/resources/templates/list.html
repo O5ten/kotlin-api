@@ -7,28 +7,48 @@
             border-width: 1px;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="application/javascript">
+
+        var deleteSittpuff = function (id) {
+            $.ajax({
+                url: '/sittpuffar/' + id,
+                type: 'DELETE',
+                success: function () {
+                    window.location.reload(true);
+                }
+            });
+        };
+        var areYouSure = function(id, name){
+            if(confirm("Ta bort " + name + "?")){
+               deleteSittpuff(id)
+            }
+        }
+    </script>
 </head>
 <body>
 <H1>Sittpuffar</H1>
 <div>
-    <div><a href="/sittpuffar/new">Skapa ny</a></div>
+    <div><input type="button" value="Skapa ny" onclick="window.location.href = '/sittpuffar/new'"/></div>
     <table>
         <tr>
             <th>#</th>
             <th>namn</th>
             <th>pris</th>
             <th>bildlänk</th>
-            <th>affiliatelänk</th>
+            <th>affiliatelänk</th>  
             <th>taggar</th>
+            <th>Ta bort</th>
         </tr>
         {{#each sittpuffar}}
         <tr>
             <td> {{@index}}</td>
-            <td> <a href="/sittpuffar/{{id}}/edit">{{name}}</a></td>
+            <td style="text-align: center"> <input type="button" value="{{name}}" onclick="window.location.href = '/sittpuffar/{{id}}/edit'"/></td>
             <td> {{price}}</td>
             <td> {{imageLink}}</td>
             <td> {{targetLink}}</td>
             <td> {{tags}}</td>
+            <td> <input value="Ta bort" type="button" onclick="areYouSure('{{id}}', '{{name}}')"></td>
         </tr>
         {{/each}}
     </table>
