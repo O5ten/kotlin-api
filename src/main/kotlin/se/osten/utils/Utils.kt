@@ -26,7 +26,7 @@ fun intToHex(index: Int, key: Int): String {
     if (index in dashes) {
         return "-"
     }
-    return when(key) {
+    return when (key) {
         10 -> "a"
         11 -> "b"
         12 -> "c"
@@ -37,4 +37,14 @@ fun intToHex(index: Int, key: Int): String {
     }
 }
 
+fun toHashMap(puff: Sittpuff): HashMap<String, Any> {
+    return hashMapOf<String, Any>(
+            "id" to puff.id,
+            "name" to puff.name,
+            "price" to puff.price,
+            "imageLink" to puff.imageLink,
+            "targetLink" to puff.targetLink,
+            "tags" to puff.tags.joinToString(",")
+    )
+}
 

@@ -1,0 +1,49 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="application/javascript">
+        var submitSittpuff = function () {
+            $.post("/sittpuffar", JSON.stringify({
+                name: $("#name").val(),
+                price: $("#price").val(),
+                imageLink: $("#imageLink").val(),
+                targetLink: $("#targetLink").val(),
+                tags: $("#tags").val().split(',')
+            }), function (puff, xhr) {
+                window.location.href = '/sittpuffar/' + puff.id + '/edit';
+            }, "json");
+        }
+    </script>
+</head>
+<body>
+<H1>Skapa ny sittpuff</H1>
+<div>
+    <table>
+        <tr>
+            <td>Namn:</td>
+            <td><input id="name" title="namn" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Pris:</td>
+            <td><input id="price" title="pris" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Bildlänk:</td>
+            <td><input id="imageLink" title="Bildlänk" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Affiliatelänk:</td>
+            <td><input id="targetLink" title="Mållänk" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Taggar(separera med komma):</td>
+            <td><input id="tags" title="tags" type="text"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="submitPuff" title="Skapa" value="Skapa" onclick="submitSittpuff()" type="button"/></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

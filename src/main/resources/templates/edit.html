@@ -1,0 +1,64 @@
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="application/javascript">
+        var submitSittpuff = function () {
+            $.ajax({
+                url: '/sittpuffar/{{id}}',
+                type: 'PUT',
+                data: JSON.stringify({
+                    id: "{{id}}",
+                    name: $("#name").val(),
+                    price: $("#price").val(),
+                    imageLink: $("#imageLink").val(),
+                    targetLink: $("#targetLink").val(),
+                    tags: $("#tags").val().split(',')
+                }),
+                success: function (puff, xhr) {
+                    window.location.href = '/sittpuffar/' + puff.id + '/edit?justSaved';
+                }
+            });
+        };
+        setTimeout(function(){
+            $("h2").remove()
+        }, 6000)
+
+    </script>
+</head>
+<body>
+<H1>Ändra sittpuff {{name}} </H1>
+{{#if justSaved}}
+<h2 id="#saved">Ändrad!</h2>
+{{/if}}
+<div>
+    <table>
+        <tr>
+            <td>Namn:</td>
+            <td><input id="name" title="namn" value="{{name}}" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Pris:</td>
+            <td><input id="price" title="pris" value="{{price}}" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Bildlänk:</td>
+            <td><input id="imageLink" title="Bildlänk" value={{imageLink}} type="text"/></td>
+        </tr>
+        <tr>
+            <td>Affiliatelänk:</td>
+            <td><input id="targetLink" title="Mållänk" value="{{targetLink}}" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Taggar(separera med komma):</td>
+            <td><input id="tags" title="tags" value="{{tags}}" type="text"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="submitPuff" title="Ändra" value="Ändra" onclick="submitSittpuff()" type="button"/></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

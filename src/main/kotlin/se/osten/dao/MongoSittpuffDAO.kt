@@ -12,6 +12,7 @@ class MongoSittpuffDAO : SittpuffDAO {
     val database = client.getDatabase("sittpuffar")
     val sittpuffar = database.getCollection<Sittpuff>("sittpuffar")
     val byId = { id: String -> "{id: {$eq: '$id'}}" }
+
     override fun count(): Long {
         return sittpuffar.count()
     }
