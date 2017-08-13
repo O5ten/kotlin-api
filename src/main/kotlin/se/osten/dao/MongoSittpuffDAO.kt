@@ -8,9 +8,12 @@ import se.osten.beans.Sittpuff
 
 class MongoSittpuffDAO : SittpuffDAO {
 
-    val client = KMongo.createClient("192.168.0.198:27017")
+    val host = System.getProperty("mongodb.host", "localhost");
+    val port = System.getProperty("mongodb.port", "27017")
+    val client = KMongo.createClient("$host:$port")
     val database = client.getDatabase("sittpuffar")
     val sittpuffar = database.getCollection<Sittpuff>("sittpuffar")
+
     val byId = { id: String -> "{id: {$eq: '$id'}}" }
 
     override fun count(): Long {

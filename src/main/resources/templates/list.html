@@ -19,9 +19,9 @@
                 }
             });
         };
-        var areYouSure = function(id, name){
-            if(confirm("Ta bort " + name + "?")){
-               deleteSittpuff(id)
+        var areYouSure = function (id, name) {
+            if (confirm("Ta bort " + name + "?")) {
+                deleteSittpuff(id)
             }
         }
     </script>
@@ -36,19 +36,20 @@
             <th>namn</th>
             <th>pris</th>
             <th>bildlänk</th>
-            <th>affiliatelänk</th>  
+            <th>affiliatelänk</th>
             <th>taggar</th>
             <th>Ta bort</th>
         </tr>
         {{#each sittpuffar}}
         <tr>
             <td> {{@index}}</td>
-            <td style="text-align: center"> <input type="button" value="{{name}}" onclick="window.location.href = '/sittpuffar/{{id}}/edit'"/></td>
+            <td style="text-align: center"><input type="button" value="{{name}}"
+                                                  onclick="window.location.href = '/sittpuffar/{{id}}/edit'"/></td>
             <td> {{price}}</td>
             <td> {{imageLink}}</td>
             <td> {{targetLink}}</td>
             <td> {{tags}}</td>
-            <td> <input value="Ta bort" type="button" onclick="areYouSure('{{id}}', '{{name}}')"></td>
+            <td><input value="Ta bort" type="button" onclick="areYouSure('{{id}}', '{{name}}')"></td>
         </tr>
         {{/each}}
     </table>
