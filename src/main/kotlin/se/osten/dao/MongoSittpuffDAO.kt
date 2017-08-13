@@ -1,9 +1,8 @@
 package se.osten.dao
 
-import com.mongodb.MongoClientURI
 import org.litote.kmongo.*
 import org.litote.kmongo.MongoOperator.*
-import org.litote.kmongo.util.KMongoConfiguration
+import se.osten.api.SittpuffDAO
 import se.osten.beans.Sittpuff
 
 class MongoSittpuffDAO : SittpuffDAO {

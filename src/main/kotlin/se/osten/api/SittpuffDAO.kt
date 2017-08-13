@@ -1,4 +1,4 @@
-package se.osten.dao
+package se.osten.api
 
 import se.osten.beans.Sittpuff
 

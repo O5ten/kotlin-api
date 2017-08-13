@@ -6,6 +6,7 @@
             border-spacing: 8px;
             border-width: 1px;
         }
+        input
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="application/javascript">
@@ -23,7 +24,11 @@
             if (confirm("Ta bort " + name + "?")) {
                 deleteSittpuff(id)
             }
-        }
+        };
+        Handlebars.registerHelper('justFilename', function (filePath) {
+            var entries = filePath.split('/');
+            return new Handlebars.SafeString(entries[entries.length - 1])
+        });
     </script>
 </head>
 <body>
@@ -46,8 +51,8 @@
             <td style="text-align: center"><input type="button" value="{{name}}"
                                                   onclick="window.location.href = '/sittpuffar/{{id}}/edit'"/></td>
             <td> {{price}}</td>
-            <td> {{imageLink}}</td>
-            <td> {{targetLink}}</td>
+            <td><a href="{{imageLink}}"><img src="{{imageLink}}" height="40" width="40"/></a></td>
+            <td><a href="{{targetLink}}">{{targetLink}}</a></td>
             <td> {{tags}}</td>
             <td><input value="Ta bort" type="button" onclick="areYouSure('{{id}}', '{{name}}')"></td>
         </tr>

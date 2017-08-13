@@ -2,6 +2,7 @@ package se.osten.utils
 
 import se.osten.beans.Sittpuff
 import spark.Request
+import java.text.SimpleDateFormat
 import java.util.*
 
 val bitsOf32: IntRange = 0..31
@@ -35,6 +36,11 @@ fun intToHex(index: Int, key: Int): String {
         15 -> "f"
         else -> key.toString()
     }
+}
+
+val formatter = SimpleDateFormat("HH:mm:ss")
+fun log(req: Request, event: String = "") {
+    println("API ${formatter.format(Date())} : ${req.ip()} ${req.requestMethod()} /sittpuffar/$event")
 }
 
 fun toHashMap(puff: Sittpuff): HashMap<String, Any> {
