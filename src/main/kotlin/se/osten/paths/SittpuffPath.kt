@@ -4,21 +4,34 @@ import com.google.gson.Gson
 import se.osten.api.SittpuffDAO
 import se.osten.beans.Entity
 import se.osten.beans.Sittpuff
-import se.osten.utils.createGuid
-import se.osten.utils.filterByTag
-import se.osten.utils.log
-import se.osten.utils.toHashMap
+import se.osten.utils.*
 import spark.ModelAndView
 import spark.Spark.*
+import spark.kotlin.get
 import spark.template.handlebars.HandlebarsTemplateEngine
 import java.util.*
 
-class SittpuffPath(val dao: SittpuffDAO) {
+class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
 
     val gson = Gson()
     val handlebars = HandlebarsTemplateEngine()
+    val authenticatedUsers = properties.getProperty("users").split(',').map { encode64(it) }
 
     fun activate() {
+
+        before("/*") { req, res ->
+            val authHeader = req.headers("Authorization");
+            if (authHeader != null) {
+                val token = authHeader.split(" ")[1];
+                if(token !in authenticatedUsers){
+                    halt(401, "You are not a valid user")
+                }
+            }else{
+                res.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"")
+                halt(401, "authenticate yourself")
+            }
+        }
+
         path("/sittpuffar") {
 
             get("/new") { req, res ->

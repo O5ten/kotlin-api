@@ -2,6 +2,7 @@ package se.osten.utils
 
 import se.osten.beans.Sittpuff
 import spark.Request
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,6 +42,10 @@ fun intToHex(index: Int, key: Int): String {
 val formatter = SimpleDateFormat("HH:mm:ss")
 fun log(req: Request, event: String = "") {
     println("API ${formatter.format(Date())} : ${req.ip()} ${req.requestMethod()} /sittpuffar/$event")
+}
+
+fun encode64(string: String): String {
+    return String(Base64.getEncoder().encode(string.toByteArray(Charset.defaultCharset())))
 }
 
 fun toHashMap(puff: Sittpuff): HashMap<String, Any> {
