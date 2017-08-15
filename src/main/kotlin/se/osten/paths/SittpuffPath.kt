@@ -71,9 +71,10 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
             }
 
             get("") { req, res ->
-                log(req, "${dao.count()} results delivered")
                 res.type("application/json")
-                gson.toJson(filterByTag(req, dao.findAll()))
+                val entities = filterByTag(req, dao.findAll())
+                log(req, " ${entities.size} results delivered")
+                gson.toJson(entities)
             }
 
             get("/:id") { req, res ->

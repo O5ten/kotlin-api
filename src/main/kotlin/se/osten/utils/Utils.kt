@@ -16,9 +16,9 @@ fun createGuid(): String {
 }
 
 fun filterByTag(req: Request, sittpuffar: List<Sittpuff>): List<Sittpuff> {
-    val tags = req.queryParams("tags")?.split(",")?.map { v -> v.toLowerCase() }
+    val tags = req.queryParams("tags")?.split(",")?.map { v -> v.toLowerCase().trim() }
     return if (tags != null) return sittpuffar.filter { v ->
-        v.tags.map { t -> t.toLowerCase() }.any { t ->
+        v.tags.map { t -> t.toLowerCase().trim() }.any { t ->
             t in tags
         }
     } else sittpuffar
