@@ -5,10 +5,10 @@ import org.litote.kmongo.MongoOperator.*
 import se.osten.api.SittpuffDAO
 import se.osten.beans.Sittpuff
 
-class MongoSittpuffDAO : SittpuffDAO {
+class MongoSittpuffDAO(val properties: Properties) : SittpuffDAO {
 
-    val host = System.getProperty("mongodb.host", "localhost");
-    val port = System.getProperty("mongodb.port", "27017")
+    val host = properties.getProperty("mongodb.host");
+    val port = properties.getProperty("mongodb.port");
     val client = KMongo.createClient("$host:$port")
     val database = client.getDatabase("sittpuffar")
     val sittpuffar = database.getCollection<Sittpuff>("sittpuffar")

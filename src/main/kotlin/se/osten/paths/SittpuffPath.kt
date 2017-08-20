@@ -15,7 +15,7 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
 
     val gson = Gson()
     val handlebars = HandlebarsTemplateEngine()
-    val authenticatedUsers = properties.getProperty("users").split(',').map { encode64(it) }
+    val authenticatedUsers = properties.getProperty("sittpuff_users").split(',').map { encode64(it) }
 
     fun activate() {
 
