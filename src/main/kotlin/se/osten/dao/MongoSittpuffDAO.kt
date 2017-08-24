@@ -1,9 +1,10 @@
 package se.osten.dao
 
 import org.litote.kmongo.*
-import org.litote.kmongo.MongoOperator.*
+import org.litote.kmongo.MongoOperator.eq
 import se.osten.api.SittpuffDAO
 import se.osten.beans.Sittpuff
+import java.util.*
 
 class MongoSittpuffDAO(val properties: Properties) : SittpuffDAO {
 

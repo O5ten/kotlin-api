@@ -4,7 +4,7 @@ import org.junit.Test
 import se.osten.utils.createGuid
 import kotlin.test.assertEquals
 
-class HelloTest {
+class UtilsTest {
 
     @Test
     fun shouldCreateGuidWithFourDashes(){

@@ -7,7 +7,6 @@ import se.osten.beans.Sittpuff
 import se.osten.utils.*
 import spark.ModelAndView
 import spark.Spark.*
-import spark.kotlin.get
 import spark.template.handlebars.HandlebarsTemplateEngine
 import java.util.*
 
@@ -23,10 +22,10 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
             val authHeader = req.headers("Authorization");
             if (authHeader != null) {
                 val token = authHeader.split(" ")[1];
-                if(token !in authenticatedUsers){
+                if (token !in authenticatedUsers) {
                     halt(401, "You are not a valid user")
                 }
-            }else{
+            } else {
                 res.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"")
                 halt(401, "authenticate yourself")
             }

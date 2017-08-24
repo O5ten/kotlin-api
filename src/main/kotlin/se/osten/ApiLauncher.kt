@@ -13,6 +13,6 @@ fun main(args: Array<String>) {
     val fis: FileInputStream = file.inputStream()
     properties.load(fis)
     fis.close()
-    port(properties.getProperty("exposePort"))
-    SittpuffPath(MongoSittpuffDAO(), properties).activate()
+    port(properties.getProperty("exposePort").toInt())
+    SittpuffPath(MongoSittpuffDAO(properties), properties).activate()
 }
