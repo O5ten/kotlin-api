@@ -3,22 +3,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="application/javascript">
         var submitSittpuff = function () {
-            $.post("/sittpuffar", JSON.stringify({
+            $.post("/skribentus/{{path}}", JSON.stringify({
                 name: $("#name").val(),
                 price: $("#price").val(),
                 imageLink: $("#imageLink").val(),
                 targetLink: $("#targetLink").val(),
                 tags: $("#tags").val().split(',')
             }), function (puff, xhr) {
-                window.location.href = '/sittpuffar/' + puff.id + '/edit';
+                window.location.href = '/skribentus/{{path}}/' + puff.id + '/edit';
             }, "json");
         }
     </script>
 </head>
 <body>
-<H1>Skapa ny sittpuff</H1>
+<H1>Skapa nya {{path}}</H1>
 <div>
-    <input type="button" value="Tillbaka" onclick="window.location.href = '/sittpuffar/edit'"/>
+    <input type="button" value="Tillbaka" onclick="window.location.href = '/skribentus/{{path}}/edit'"/>
 </div>
 <div>
     <table>

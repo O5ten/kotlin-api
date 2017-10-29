@@ -1,6 +1,7 @@
 package se.osten.utils
 
-import se.osten.beans.Sittpuff
+import org.litote.kmongo.MongoOperator
+import se.osten.beans.Entity
 import spark.Request
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -10,12 +11,12 @@ val bitsOf32: IntRange = 0..31
 val dashes = listOf<Int>(8, 13, 18, 23, 32)
 
 fun createGuid(): String {
-    val rnd: Random = Random(System.currentTimeMillis())
+    val rnd = Random(System.currentTimeMillis())
     val range: List<Int> = bitsOf32.map { rnd.nextInt(16) }
     return range.mapIndexed { v, i -> intToHex(v, i) }.joinToString("");
 }
 
-fun filterByTag(req: Request, sittpuffar: List<Sittpuff>): List<Sittpuff> {
+fun filterByTag(req: Request, sittpuffar: List<Entity>): List<Entity> {
     val tags = req.queryParams("tags")?.split(",")?.map { v -> v.toLowerCase().trim() }
     return if (tags != null) return sittpuffar.filter { v ->
         v.tags.map { t -> t.toLowerCase().trim() }.any { t ->
@@ -41,14 +42,14 @@ fun intToHex(index: Int, key: Int): String {
 
 val formatter = SimpleDateFormat("HH:mm:ss")
 fun log(req: Request, event: String = "") {
-    println("API ${formatter.format(Date())} : ${req.ip()} ${req.requestMethod()} /sittpuffar/$event")
+    println("API ${formatter.format(Date())} : ${req.ip()} ${req.requestMethod()} ${req.pathInfo()}/$event")
 }
 
 fun encode64(string: String): String {
     return String(Base64.getEncoder().encode(string.toByteArray(Charset.defaultCharset())))
 }
 
-fun toHashMap(puff: Sittpuff): HashMap<String, Any> {
+fun toHashMap(puff: Entity): HashMap<String, Any> {
     return hashMapOf<String, Any>(
             "id" to puff.id,
             "name" to puff.name,
@@ -58,4 +59,7 @@ fun toHashMap(puff: Sittpuff): HashMap<String, Any> {
             "tags" to puff.tags.joinToString(",")
     )
 }
+
+val byId = { id: String -> "{id: {${MongoOperator.eq}: '$id'}}" }
+
 

@@ -1,40 +1,30 @@
 package se.osten.paths
 
 import com.google.gson.Gson
-import se.osten.api.SittpuffDAO
+import se.osten.api.DAO
 import se.osten.beans.Entity
-import se.osten.beans.Sittpuff
-import se.osten.utils.*
+import se.osten.beans.SlimEntity
+import se.osten.utils.createGuid
+import se.osten.utils.filterByTag
+import se.osten.utils.log
+import se.osten.utils.toHashMap
 import spark.ModelAndView
+import spark.Spark
 import spark.Spark.*
 import spark.template.handlebars.HandlebarsTemplateEngine
 import java.util.*
 
-class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
+class EntityPath(private val dao: DAO<Entity>, private val users: List<String>) {
 
     val gson = Gson()
     val handlebars = HandlebarsTemplateEngine()
-    val authenticatedUsers = properties.getProperty("sittpuff_users").split(',').map { encode64(it) }
 
-    fun activate() {
+    fun enableResource(path: String) {
 
-        before("/*") { req, res ->
-            val authHeader = req.headers("Authorization");
-            if (authHeader != null) {
-                val token = authHeader.split(" ")[1];
-                if (token !in authenticatedUsers) {
-                    halt(401, "You are not a valid user")
-                }
-            } else {
-                res.header("WWW-Authenticate", "Basic realm=\"User Visible Realm\"")
-                halt(401, "authenticate yourself")
-            }
-        }
-
-        path("/sittpuffar") {
+        path("/$path") {
 
             get("/new") { req, res ->
-                val map: Map<String, Any> = emptyMap<String, Any>()
+                val map: Map<String, Any> = hashMapOf("path" to path)
                 val page: String = handlebars.render(
                         ModelAndView(map, "new.html")
                 )
@@ -43,11 +33,12 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
 
             get("/:id/edit") { req, res ->
                 val id: String = req.params("id")
-                val puff: Sittpuff? = dao.findById(id)
+                val entity: Entity? = dao.findById(id)
                 val justSaved = req.queryParams().contains("justSaved");
-                if (puff != null) {
-                    val map: HashMap<String, Any> = toHashMap(puff)
+                if (entity != null) {
+                    val map: HashMap<String, Any> = toHashMap(entity)
                     map.put("justSaved", justSaved)
+                    map.put("path", path)
                     val page: String = handlebars.render(
                             ModelAndView(map, "edit.html")
                     )
@@ -55,14 +46,13 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
                 } else {
                     res.status(404)
                     res.type("application/json")
-                    gson.toJson(Entity(id, "not found"))
+                    gson.toJson(SlimEntity(id, "not found"))
                 }
             }
 
             get("/edit") { req, res ->
-                val sittpuffar: List<Map<String, Any>> = dao.findAll().map { toHashMap(it) }
-                val map: Map<String, Any> = hashMapOf("sittpuffar" to sittpuffar)
-
+                val entities: List<Map<String, Any>> = dao.findAll().map { toHashMap(it) }
+                val map: Map<String, Any> = hashMapOf("entities" to entities, "path" to path)
                 val page: String = handlebars.render(
                         ModelAndView(map, "list.html")
                 )
@@ -79,42 +69,42 @@ class SittpuffPath(val dao: SittpuffDAO, val properties: Properties) {
             get("/:id") { req, res ->
                 res.type("application/json")
                 val id = req.params("id")
-                val sittpuff: Sittpuff? = dao.findById(id)
+                val sittpuff: Entity? = dao.findById(id)
                 if (sittpuff != null) {
                     log(req, "$id found")
                     gson.toJson(sittpuff)
                 } else {
                     log(req, "$id not found")
                     res.status(404)
-                    gson.toJson(Entity(id, "not found"))
+                    gson.toJson(SlimEntity(id, "not found"))
                 }
             }
 
             post("") { req, res ->
-                val fromJson: Sittpuff = gson.fromJson(req.body(), Sittpuff::class.java)
+                val fromJson: Entity = gson.fromJson(req.body(), Entity::class.java)
                 val id: String = createGuid()
                 dao.save(fromJson.copy(id))
-                log(req, "${id} created")
+                log(req, " created")
                 res.status(201)
                 res.type("application/json")
-                gson.toJson(Entity(id, "created"))
+                gson.toJson(SlimEntity(id, "created"))
             }
 
             put("/:id") { req, res ->
                 val id = req.params("id")
                 res.type("application/json")
-                val sittpuff: Sittpuff = gson.fromJson(req.body(), Sittpuff::class.java)
-                log(req, "${id} modified")
+                val sittpuff: Entity = gson.fromJson(req.body(), Entity::class.java)
+                log(req, " modified")
                 dao.update(id, sittpuff)
-                gson.toJson(Entity(id, "modified"))
+                gson.toJson(SlimEntity(id, "modified"))
             }
 
             delete("/:id") { req, res ->
                 val id = req.params("id")
                 res.type("application/json")
-                log(req, "${id} removed")
+                log(req, " removed")
                 dao.delete(id)
-                gson.toJson(Entity(id, "removed"))
+                gson.toJson(SlimEntity(id, "removed"))
             }
         }
     }

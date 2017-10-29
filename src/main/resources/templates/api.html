@@ -1,0 +1,36 @@
+<html>
+<head>
+    <style>
+        table {
+            padding: 8px;
+            border-spacing: 8px;
+            border-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<H1>Skribentus API</H1>
+<div>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Resurser</th>
+            <th>Entiteter</th>
+            <th>Ändra</th>
+        </tr>
+        {{#each resources}}
+        <tr>
+            <td>{{@index}}</td>
+            <td><a href="/skribentus/{{this}}">/{{this}}</a></td>
+            <td>
+                {{#with (lookup ../entities @index) includeZero=true}}
+                    {{this}}
+                {{/with}}
+            </td>
+            <td><input title="Ändra" value="Ändra" onclick="window.location.href='/skribentus/{{this}}/edit'" type="button"/></td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+</body>
+</html>

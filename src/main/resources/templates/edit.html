@@ -1,11 +1,10 @@
 <html>
 <head>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="application/javascript">
-        var submitSittpuff = function () {
+        var submitEntity = function () {
             $.ajax({
-                url: '/sittpuffar/{{id}}',
+                url: '/skribentus/{{path}}/{{id}}',
                 type: 'PUT',
                 data: JSON.stringify({
                     id: "{{id}}",
@@ -15,8 +14,8 @@
                     targetLink: $("#targetLink").val(),
                     tags: $("#tags").val().split(',')
                 }),
-                success: function (puff, xhr) {
-                    window.location.href = '/sittpuffar/' + puff.id + '/edit?justSaved';
+                success: function (entity, xhr) {
+                    window.location.href = '/skribentus/{{path}}/' + entity.id + '/edit?justSaved';
                 }
             });
         };
@@ -27,12 +26,12 @@
     </script>
 </head>
 <body>
-<H1>Ändra sittpuff {{name}} </H1>
+<H1>Ändra entitet {{name}} </H1>
 {{#if justSaved}}
 <h2 id="#saved">Ändrad!</h2>
 {{/if}}
 <div>
-    <input type="button" value="Tillbaka" onclick="window.location.href = '/sittpuffar/edit'"/>
+    <input type="button" value="Tillbaka" onclick="window.location.href = '/skribentus/{{path}}/edit'"/>
 </div>
 <div>
     <table>
@@ -58,10 +57,9 @@
         </tr>
         <tr>
             <td></td>
-            <td><input id="submitPuff" title="Ändra" value="Ändra" onclick="submitSittpuff()" type="button"/></td>
+            <td><input id="submitEntity" title="Ändra" value="Ändra" onclick="submitEntity()" type="button"/></td>
         </tr>
     </table>
 </div>
-
 </body>
 </html>

@@ -11,9 +11,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="application/javascript">
 
-        var deleteSittpuff = function (id) {
+        var deleteEntity = function (id) {
             $.ajax({
-                url: '/sittpuffar/' + id,
+                url: '/skribentus/{{path}}/' + id,
                 type: 'DELETE',
                 success: function () {
                     window.location.reload(true);
@@ -22,7 +22,7 @@
         };
         var areYouSure = function (id, name) {
             if (confirm("Ta bort " + name + "?")) {
-                deleteSittpuff(id)
+                deleteEntity(id)
             }
         };
         Handlebars.registerHelper('justFilename', function (filePath) {
@@ -32,9 +32,12 @@
     </script>
 </head>
 <body>
-<H1>Sittpuffar</H1>
+<H1>{{path}}</H1>
 <div>
-    <div><input type="button" value="Skapa ny" onclick="window.location.href = '/sittpuffar/new'"/></div>
+    <div>
+        <input type="button" value="Tillbaka" onclick="window.location.href = '/skribentus'">
+        <input type="button" value="Skapa ny" onclick="window.location.href = '/skribentus/{{path}}/new'"/>
+    </div>
     <table>
         <tr>
             <th>#</th>
@@ -45,11 +48,11 @@
             <th>taggar</th>
             <th>Ta bort</th>
         </tr>
-        {{#each sittpuffar}}
+        {{#each entities}}
         <tr>
             <td> {{@index}}</td>
             <td style="text-align: center"><input type="button" value="{{name}}"
-                                                  onclick="window.location.href = '/sittpuffar/{{id}}/edit'"/></td>
+                                                  onclick="window.location.href = '/skribentus/{{path}}/{{id}}/edit'"/></td>
             <td> {{price}}</td>
             <td><a href="{{imageLink}}"><img src="{{imageLink}}" height="40" width="40"/></a></td>
             <td><a href="{{targetLink}}">{{targetLink}}</a></td>
